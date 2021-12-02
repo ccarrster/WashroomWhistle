@@ -36,9 +36,9 @@ async function poll() {
     const data = await getDeviceInfo(config.deviceId);
 
     const occupied = !data.result.status[0].value;
-    const currentStatus = (await WashroomStatus.findOne({ washroomId: config.deviceId }).exec()).occupied;
+    const currentStatus = await WashroomStatus.findOne({ washroomId: config.deviceId }).exec();
 
-    if (occupied !== currentStatus || currentStatus === undefined) {
+    if (currentStatus == undefined || currentStatus == null || occupied !== currentStatus.occupied) {
         WashroomLog.create({
             washroomId: config.deviceId,
             occupied
