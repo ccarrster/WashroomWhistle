@@ -6,18 +6,28 @@ import "./App.css";
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { apiResponse: "" };
+        this.state = { apiResponse: "", apiStateResponse: "" };
     }
 
     callAPI() {
-        fetch("http://localhost:9001/testAPI")
+        fetch("http://localhost:9001/api/logs/3428254740f5201991ea/0/3")
             .then(res => res.text())
-            .then(res => this.setState({ apiResponse: res }))
+            .then(res => this.setState({ apiResponse: JSON.parse(res).events[0].occupied + " " + JSON.parse(res).events[0].timestamp }))
+            .catch(err => err);
+    }
+
+    callAPI2() {
+        fetch("http://localhost:9001/api/status/3428254740f5201991ea")
+            .then(res => res.text())
+            .then(res => this.setState({ apiStateResponse: JSON.parse(res).occupied }))
             .catch(err => err);
     }
 
     componentDidMount() {
         this.callAPI();
+        this.callAPI2();
+        setInterval(this.callAPI2, 3000);
+        setInterval(this.callAPI, 3000);
     }
 
     render() {
@@ -26,28 +36,28 @@ class App extends Component {
                 <header className="App-header">
                     <img src="washroom.png" /><img src="whistle.png" />
                     <h1 className="App-title">Washroom Whistle</h1>
-                    <div class="content">
-                    <div class="washroom">
+                    <div className="content">
+                    <div className="washroom">
                     Kitchen Washroom 
-                    <img class="icon" src="dooropen.png"></img>
-                    <img class="icon" src="bath.png"></img>
-                   <img class="icon" src="shower.png"></img>
-                   <img class="icon" src="sink.png"></img>
-                   <img class="icon" src="toilet.png"></img>
-                   <img class="icon" src="bidet.png"></img>
-                   <img class="icon" src="stink.png"></img>
-                   <div>Last used at 12:42 pm</div>
+                    <img className="icon" src={this.state.apiStateResponse?"doorclosed.png":"dooropen.png"}></img>
+                    <img className="icon" src="bath.png"></img>
+                   <img className="icon" src="shower.png"></img>
+                   <img className="icon" src="sink.png"></img>
+                   <img className="icon" src="toilet.png"></img>
+                   <img className="icon" src="bidet.png"></img>
+                   <img className="icon" src="stink.png"></img>
+                   <div>Log - Log</div>
+                   <div>{this.state.apiResponse}</div>
                    </div>
-                   <div class="washroom">
-                    Bedrooms 
-                   <img class="icon" src="doorclosed.png"></img>
-                   <img class="icon" src="sink.png"></img>
-                   <img class="icon" src="toilet.png"></img>
-                   <div>In use since 12:57 pm</div>
+                   <div className="washroom">
+                    Bedroom Washroom
+                   <img className="icon" src="doorclosed.png"></img>
+                   <img className="icon" src="sink.png"></img>
+                   <img className="icon" src="toilet.png"></img>
+                   <div>Log - Log</div>
                    </div>
                    </div>
                 </header>
-                <p className="App-intro">{this.state.apiResponse}</p>
             </div>
         );
     }
