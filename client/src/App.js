@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -6,28 +6,22 @@ import "./App.css";
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { apiResponse: "", apiStateResponse: "" };
+        this.state = { logs: [], occupied: true };
     }
 
-    callAPI() {
-        fetch("http://localhost:9001/api/logs/3428254740f5201991ea/0/3")
-            .then(res => res.text())
-            .then(res => this.setState({ apiResponse: JSON.parse(res).events[0].occupied + " " + JSON.parse(res).events[0].timestamp }))
-            .catch(err => err);
-    }
+    async componentDidMount() {
+        setInterval(async () => {
+            const statusRes = await fetch('http://localhost:9001/api/status/3428254740f5201991ea');
+            const logRes = await fetch('http://localhost:9001/api/logs/3428254740f5201991ea/0/3');
 
-    callAPI2() {
-        fetch("http://localhost:9001/api/status/3428254740f5201991ea")
-            .then(res => res.text())
-            .then(res => this.setState({ apiStateResponse: JSON.parse(res).occupied }))
-            .catch(err => err);
-    }
+            const status = await statusRes.json();
+            const logs = await logRes.json();
 
-    componentDidMount() {
-        this.callAPI();
-        this.callAPI2();
-        setInterval(this.callAPI2, 3000);
-        setInterval(this.callAPI, 3000);
+            this.setState({
+                occupied: status.occupied,
+                logs: logs.events
+            });
+        }, 500);
     }
 
     render() {
@@ -37,26 +31,51 @@ class App extends Component {
                     <img src="washroom.png" /><img src="whistle.png" />
                     <h1 className="App-title">Washroom Whistle</h1>
                     <div className="content">
-                    <div className="washroom">
-                    Kitchen Washroom 
-                    <img className="icon" src={this.state.apiStateResponse?"doorclosed.png":"dooropen.png"}></img>
-                    <img className="icon" src="bath.png"></img>
-                   <img className="icon" src="shower.png"></img>
-                   <img className="icon" src="sink.png"></img>
-                   <img className="icon" src="toilet.png"></img>
-                   <img className="icon" src="bidet.png"></img>
-                   <img className="icon" src="stink.png"></img>
-                   <div>Log - Log</div>
-                   <div>{this.state.apiResponse}</div>
-                   </div>
-                   <div className="washroom">
-                    Bedroom Washroom
-                   <img className="icon" src="doorclosed.png"></img>
-                   <img className="icon" src="sink.png"></img>
-                   <img className="icon" src="toilet.png"></img>
-                   <div>Log - Log</div>
-                   </div>
-                   </div>
+                        <div className="washroom">
+                            <img className="icon" src="bath.png"></img>
+                            <img className="icon" src="shower.png"></img>
+                            <img className="icon" src="sink.png"></img>
+                            <img className="icon" src="toilet.png"></img>
+                            <img className="icon" src="bidet.png"></img>
+                            <img className="icon" src="stink.png"></img>
+
+                            <br />
+
+                            <h3>Kitchen Washroom</h3>
+                            <p><strong>Status:</strong> {this.state.occupied ? 'Occupied' : 'Available'}</p>
+                            
+                            <img className="icon" src={this.state.occupied ? "doorclosed.png" : "dooropen.png"}></img>
+
+                            <br />
+
+                            <h3>Recent Events</h3>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Washroom Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {this.state.logs.map((log, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td>{log.timestamp}</td>
+                                            <td>{log.occupied ? 'Occupied' : 'Available'}</td>
+                                        </tr>
+                                    );
+                                })}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/* <div className="washroom">
+                            Bedroom Washroom
+                            <img className="icon" src="doorclosed.png"></img>
+                            <img className="icon" src="sink.png"></img>
+                            <img className="icon" src="toilet.png"></img>
+                            <div>Log - Log</div>
+                        </div> */}
+                    </div>
                 </header>
             </div>
         );
