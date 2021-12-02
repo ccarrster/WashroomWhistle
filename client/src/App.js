@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +25,27 @@ class App extends Component {
             <div className="App">
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
-                    <h1 className="App-title">Welcome to React</h1>
+                    <h1 className="App-title">Washroom Whistle</h1>
+                    <div class="content">
+                    <washroom>
+                    Kitchen Washroom 
+                    <img class="icon" src="dooropen.png"></img>
+                    <img class="icon" src="bath.png"></img>
+                   <img class="icon" src="shower.png"></img>
+                   <img class="icon" src="sink.png"></img>
+                   <img class="icon" src="toilet.png"></img>
+                   <img class="icon" src="bidet.png"></img>
+                   <img class="icon" src="stink.png"></img>
+                   <div>Last used at 12:42 pm</div>
+                   </washroom>
+                   <washroom>
+                    Bedrooms 
+                   <img class="icon" src="doorclosed.png"></img>
+                   <img class="icon" src="sink.png"></img>
+                   <img class="icon" src="toilet.png"></img>
+                   <div>In use since 12:57 pm</div>
+                   </washroom>
+                   </div>
                 </header>
                 <p className="App-intro">{this.state.apiResponse}</p>
             </div>
