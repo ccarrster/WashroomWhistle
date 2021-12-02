@@ -24,11 +24,16 @@ var httpClient = axios.create({
 
 exports.startPolling = async () => {
     console.log('TuyaAPI: Polling service started...');
-    while (true) {
-        await Promise.all([
-            poll(),
-            timeout(5000)
-        ])
+
+    if (process.env.ENVIRONMENT == 'production') {
+        while (true) {
+            await Promise.all([
+                poll(),
+                timeout(5000)
+            ])
+        }
+    } else {
+        await poll();
     }
 }
 
@@ -39,6 +44,7 @@ async function poll() {
     const currentStatus = await WashroomStatus.findOne({ washroomId: config.deviceId }).exec();
 
     if (currentStatus == undefined || currentStatus == null || occupied !== currentStatus.occupied) {
+        console.log('TuyaAPI: Device status updated');
         WashroomLog.create({
             washroomId: config.deviceId,
             occupied
