@@ -57,8 +57,8 @@ async function poll() {
     }
 
     WashroomStatus.findOneAndUpdate(
-        { washroomId: config.deviceId }, // query
-        { occupied },
+        { washroomId: config.deviceId, occupied: !occupied }, // query
+        { occupied, timeUpdated: Date.now() },
         { 
             upsert: true,
             new: true,
