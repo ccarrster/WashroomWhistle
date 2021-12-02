@@ -15,12 +15,14 @@ router.get("/status/:deviceId", async (req, res, next) => {
     if (deviceStatus != null && deviceStatus != undefined) {
         res.json({
             washroomId: deviceId,
-            occupied: deviceStatus.occupied
+            occupied: deviceStatus.occupied,
+            timeUpdated: deviceStatus.timeUpdated
         });
     } else {
         res.json({
             washroomId: deviceId,
-            occupied: false
+            occupied: false,
+            timeUpdated: Date.now()
         });
     }
 });
