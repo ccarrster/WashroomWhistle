@@ -24,10 +24,10 @@ class App extends Component {
         return (
             <div className="App">
                 <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
+                    <img src="washroom.png" /><img src="whistle.png" />
                     <h1 className="App-title">Washroom Whistle</h1>
                     <div class="content">
-                    <washroom>
+                    <div class="washroom">
                     Kitchen Washroom 
                     <img class="icon" src="dooropen.png"></img>
                     <img class="icon" src="bath.png"></img>
@@ -37,14 +37,14 @@ class App extends Component {
                    <img class="icon" src="bidet.png"></img>
                    <img class="icon" src="stink.png"></img>
                    <div>Last used at 12:42 pm</div>
-                   </washroom>
-                   <washroom>
+                   </div>
+                   <div class="washroom">
                     Bedrooms 
                    <img class="icon" src="doorclosed.png"></img>
                    <img class="icon" src="sink.png"></img>
                    <img class="icon" src="toilet.png"></img>
                    <div>In use since 12:57 pm</div>
-                   </washroom>
+                   </div>
                    </div>
                 </header>
                 <p className="App-intro">{this.state.apiResponse}</p>

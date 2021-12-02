@@ -8,8 +8,8 @@
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
+  background-color: blue;
+  height: 250px;
   padding: 20px;
   color: white;
 }
@@ -24,6 +24,10 @@
 
 .content {
   color: black;
+}
+
+.product{
+  
 }
 
 @keyframes App-logo-spin {
